@@ -3,28 +3,17 @@
   "title": "create-todo-request",
   "type": "object",
   "properties": {
-    "userId": {
-      "type": "string"
-    },
-    "todoId": {
-      "type": "string"
-    },
-    "createdAt": {
-      "type": "string"
-    },
     "name": {
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     },
     "dueDate": {
       "type": "string"
-    },
-    "done": {
-      "type": "boolean"
-    },
-    "attachmentUrl": {
-      "type": "string"
     }
   },
-  "required": ["name", "dueDate"],
+  "required": [
+    "name",
+    "dueDate"
+  ],
   "additionalProperties": false
 }
