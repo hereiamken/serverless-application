@@ -4,19 +4,24 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 import * as middy from 'middy'
 import { cors } from 'middy/middlewares'
 
-import { encodeNextKey, getUserId, parseLimitParameter, parseNextKeyParameter } from '../utils';
+import {
+  encodeNextKey,
+  getUserId,
+  parseLimitParameter,
+  parseNextKeyParameter
+} from '../utils'
 import { createLogger } from '../../utils/logger'
 import { getAllTodos } from '../../businessLayer/todos'
 
 const logger = createLogger('getTodos')
-// TODO: Get all TODO items for a current user
+// Get all TODO items for a current user
 export const handler = middy(
   async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     logger.info('Processing event: ', event)
 
     let nextKey // Next key to continue scan operation if necessary
     let limit // Maximum number of elements to return
-  
+
     try {
       // Parse query parameters
       nextKey = parseNextKeyParameter(event)
@@ -30,10 +35,10 @@ export const handler = middy(
         })
       }
     }
-  
+
     const userId = getUserId(event)
-    const items = await getAllTodos(userId, nextKey, limit);
-  
+    const items = await getAllTodos(userId, nextKey, limit)
+
     return {
       statusCode: 200,
       body: JSON.stringify({
@@ -42,11 +47,11 @@ export const handler = middy(
         nextKey: encodeNextKey(items.lastEvaluatedKey)
       })
     }
-  })
+  }
+)
 
 handler.use(
   cors({
     credentials: true
   })
 )
-
